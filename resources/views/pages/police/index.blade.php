@@ -157,22 +157,22 @@
                 <span class="fw-bold me-2">Map Legend:</span>
 
                 <button class="btn p-1" data-bs-toggle="modal" data-bs-target="#level6Modal">
-                    <img src="{{ asset('images/dot-blue-ring-royal-papua.png') }}" style="width:15px; height:15px;">
+                    <img src="{{ asset('images/Layer1.png') }}" style="width:15px; height:15px;">
                     <small>National Police of Timor-Leste (PNTL) Headquarters</small>
                 </button>
 
                 <button class="btn p-1" data-bs-toggle="modal" data-bs-target="#level5Modal">
-                    <img src="{{ asset('images/dot-red.png') }}" style="width:15px; height:15px;">
+                    <img src="{{ asset('images/Layer2.png') }}" style="width:15px; height:15px;">
                     <small>Municipal Police</small>
                 </button>
 
                 <button class="btn p-1" data-bs-toggle="modal" data-bs-target="#level4Modal">
-                    <img src="{{ asset('images/dot-orange-ppc.png') }}" style="width:15px; height:15px;">
+                    <img src="{{ asset('images/Layer3.png') }}" style="width:15px; height:15px;">
                     <small>Police Station</small>
                 </button>
 
                 <button class="btn p-1" data-bs-toggle="modal" data-bs-target="#level3Modal">
-                    <img src="{{ asset('images/dot-green.png') }}" style="width:15px; height:15px;">
+                    <img src="{{ asset('images/Layer4.png') }}" style="width:15px; height:15px;">
                     <small>Local Police Posts</small>
                 </button>
 
