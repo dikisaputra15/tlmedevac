@@ -158,22 +158,22 @@
 
                 <button class="btn p-1" data-bs-toggle="modal" data-bs-target="#level6Modal">
                     <img src="{{ asset('images/dot-blue-ring-royal-papua.png') }}" style="width:15px; height:15px;">
-                    <small>National Police (HQ)</small>
+                    <small>National Police of Timor-Leste (PNTL) Headquarters</small>
                 </button>
 
                 <button class="btn p-1" data-bs-toggle="modal" data-bs-target="#level5Modal">
                     <img src="{{ asset('images/dot-red.png') }}" style="width:15px; height:15px;">
-                    <small>Regional Police</small>
+                    <small>Municipal Police</small>
                 </button>
 
                 <button class="btn p-1" data-bs-toggle="modal" data-bs-target="#level4Modal">
                     <img src="{{ asset('images/dot-orange-ppc.png') }}" style="width:15px; height:15px;">
-                    <small>Provincial Police</small>
+                    <small>Police Station</small>
                 </button>
 
                 <button class="btn p-1" data-bs-toggle="modal" data-bs-target="#level3Modal">
                     <img src="{{ asset('images/dot-green.png') }}" style="width:15px; height:15px;">
-                    <small>City Police Station</small>
+                    <small>Local Police Posts</small>
                 </button>
 
             </div>
@@ -222,7 +222,7 @@
       <div class="modal-header">
         <div class="d-flex align-items-center">
             <img src="{{ asset('images/dot-orange-ppc.png') }}" style="width:15px; height:15px;">
-            <h5 class="modal-title" id="disclaimerLabel">Provincial Police Command (PPC)</h5>
+            <h5 class="modal-title" id="disclaimerLabel">Police Station Command (PPC)</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -542,10 +542,10 @@ const FilterPanel = L.Control.extend({
                 <label>Category:</label>
 
                 ${[
-                    'National Police (HQ)',
-                    'Regional Police',
-                    'Provincial Police',
-                    'City Police Station',
+                    'National Police of Timor-Leste (PNTL) Headquarters',
+                    'Municipal Police',
+                    'Police Station',
+                    'Local Police Posts',
                 ].map(c => `
                 <label style="display:block;font-size:13px;margin-bottom:4px;">
                     <input type="checkbox" name="policeCategory" value="${c}">
