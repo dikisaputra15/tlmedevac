@@ -151,7 +151,10 @@
                     <strong>Longitude:</strong> {{ $embassy->longitude ?? '-' }}
                 </p>
                  <p>
-                    <strong>Location:</strong> {{ $embassy->location ?? '-' }}
+                    <strong>Location:</strong>
+                        {{ $embassy->location ?? '-' }},
+                        {{ optional($city)->city ?? '-' }},
+                        {{ optional($province)->provinces_region ?? '-' }}, East Timor
                 </p>
             </div>
             </div>

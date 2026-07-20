@@ -263,6 +263,7 @@
                 <div class="card-body overflow-auto">
                     <p>
                         <strong>Address:</strong>
+                        {{ $hospital->address }},
                         {{ $city->city }},
                         {{ $province->provinces_region }}, East Timor
                     </p>

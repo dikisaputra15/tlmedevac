@@ -35,7 +35,14 @@ class AirportsController extends Controller
      */
     public function filter(Request $request)
     {
-        $query = Airport::query();
+        $query = Airport::query()
+            ->leftJoin('cities', 'airports.city_id', '=', 'cities.id')
+            ->leftJoin('provincesregions', 'airports.province_id', '=', 'provincesregions.id')
+            ->select(
+                'airports.*',
+                'cities.city as city_name',
+                'provincesregions.provinces_region as province_name'
+            );
 
         $query->where('airport_status', true);
 
