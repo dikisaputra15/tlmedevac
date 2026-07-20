@@ -155,7 +155,7 @@
                     <strong>Location:</strong>
                     {{ $police->location ?? '-' }},
                     {{ $city->city }},
-                    {{ $province->provinces_region }}, Thailand
+                    {{ $province->provinces_region }}, East Timor
                 </p>
                 <p>
                     <strong>Hours of Operation:</strong>
