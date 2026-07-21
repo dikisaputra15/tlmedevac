@@ -204,7 +204,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
-             <img src="{{ asset('images/Level4.png') }}" style="width:15px; height:15px;">
+             <img src="{{ asset('images/Layer4.png') }}" style="width:15px; height:15px;">
             <h5 class="modal-title" id="disclaimerLabel">Local Police Posts</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -221,7 +221,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
-            <img src="{{ asset('images/Level3.png') }}" style="width:15px; height:15px;">
+            <img src="{{ asset('images/Layer3.png') }}" style="width:15px; height:15px;">
             <h5 class="modal-title" id="disclaimerLabel">Police Station</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -238,7 +238,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
-            <img src="{{ asset('images/Level2.png') }}" style="width:15px; height:15px;">
+            <img src="{{ asset('images/Layer2.png') }}" style="width:15px; height:15px;">
             <h5 class="modal-title" id="disclaimerLabel">Municipal Police</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -255,7 +255,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
-            <img src="{{ asset('images/Level1.png') }}" style="width:15px; height:15px;">
+            <img src="{{ asset('images/Layer1.png') }}" style="width:15px; height:15px;">
             <h5 class="modal-title" id="disclaimerLabel">National Police of Timor-Leste (PNTL) Headquarters</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
