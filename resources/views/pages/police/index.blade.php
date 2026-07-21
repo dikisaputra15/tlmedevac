@@ -204,8 +204,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
-             <img src="{{ asset('images/dot-green.png') }}" style="width:15px; height:15px;">
-            <h5 class="modal-title" id="disclaimerLabel">Police Station</h5>
+             <img src="{{ asset('images/Level4.png') }}" style="width:15px; height:15px;">
+            <h5 class="modal-title" id="disclaimerLabel">Local Police Posts</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -221,8 +221,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
-            <img src="{{ asset('images/dot-orange-ppc.png') }}" style="width:15px; height:15px;">
-            <h5 class="modal-title" id="disclaimerLabel">Police Station Command (PPC)</h5>
+            <img src="{{ asset('images/Level3.png') }}" style="width:15px; height:15px;">
+            <h5 class="modal-title" id="disclaimerLabel">Police Station</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -238,8 +238,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
-            <img src="{{ asset('images/dot-red.png') }}" style="width:15px; height:15px;">
-            <h5 class="modal-title" id="disclaimerLabel">Divisional Command</h5>
+            <img src="{{ asset('images/Level2.png') }}" style="width:15px; height:15px;">
+            <h5 class="modal-title" id="disclaimerLabel">Municipal Police</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -255,8 +255,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
-            <img src="{{ asset('images/dot-blue-ring-royal-papua.png') }}" style="width:15px; height:15px;">
-            <h5 class="modal-title" id="disclaimerLabel">Royal Papua New Guinea Constabulary (Commissioner HQ)</h5>
+            <img src="{{ asset('images/Level1.png') }}" style="width:15px; height:15px;">
+            <h5 class="modal-title" id="disclaimerLabel">National Police of Timor-Leste (PNTL) Headquarters</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
