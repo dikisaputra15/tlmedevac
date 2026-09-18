@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
-@section('title','Emergency Support')
-@section('page-title', 'East Timor Medical Facility')
+@section('title','More Details')
+@section('page-title', 'East Timor Airports')
 
 @push('styles')
 
@@ -9,7 +9,17 @@
     #map {
         height: 600px;
     }
-    p{
+
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    td {
+        border: 1px solid black;
+        padding: 4px;
+    }
+
+     p{
         margin-bottom: 8px;
         line-height: 18px;
     }
@@ -19,20 +29,15 @@
         border-color: transparent;
     }
 
-    .btn-danger:hover{
+     .btn-danger:hover{
         background-color:#5686c3;
         border-color: transparent;
     }
 
-    .btn.active {
+     .btn.active {
         background-color: #5686c3 !important;
         border-color: transparent !important;
         color: #fff !important;
-    }
-
-    .p-1{
-        padding: 0 3px !important;
-        margin: 0 3px;
     }
 
     .p-3{
@@ -70,18 +75,7 @@
         margin-bottom: 0.5rem !important;
     }
 
-    .leaflet-routing-container-hide .leaflet-routing-collapse-btn
-    {
-        left: 8px;
-        top: 8px;
-    }
-
-    .leaflet-control-container .leaflet-routing-container-hide {
-        width: 48px;
-        height: 48px;
-    }
-
-    /* Classification */
+     /* Classification section */
     .classification {
       display: flex;
       width: 100%;
@@ -89,12 +83,36 @@
     .emergency-tools-card { container-type: inline-size; }
     .emergency-legend {
       display: grid;
-      grid-template-columns: 23% minmax(0, 1fr) 23%;
-      gap: 20px;
+      grid-template-columns: 30% minmax(0, 1fr) 22%;
+      gap: 16px;
       align-items: start;
       padding: 6px 12px 10px;
     }
     .emergency-legend > * { min-width: 0; }
+    .emergency-legend .class-header,
+    .emergency-legend .class-column { text-align: left; }
+    .emergency-legend .hospital-list { align-items: flex-start; }
+    .emergency-legend .hospital-row { justify-content: flex-start; }
+    .medical-legend .hospital-item .btn {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 6px;
+      width: auto;
+      padding-left: 0 !important;
+      text-align: left;
+    }
+    .police-legend { min-width: 0; }
+    .police-legend .legend-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .police-legend .legend-grid-item {
+      white-space: normal;
+      align-items: flex-start;
+      line-height: 1.2;
+    }
+    .police-legend .legend-grid-item small { overflow-wrap: anywhere; }
+    @container (max-width: 900px) {
+      .emergency-legend { grid-template-columns: 1fr; }
+    }
 
     .class-column {
       flex: 1;
@@ -111,7 +129,7 @@
     }
 
     /* Color bars */
-    .class-medical-classification {border: none; text-align: left;}
+    .class-medical-classification {border: none; text-align: center;}
     .class-airport-category {border: none;}
     .class-advanced { border-bottom: 3px solid #0070c0; }
     .class-intermediate { border-bottom: 3px solid #00b050; }
@@ -164,96 +182,34 @@
       height: 16px;
       object-fit: contain;
     }
+
     .legend-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0;
-      width: 100%;
-      align-items: start;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        width: 100%;
+        align-items: start;
     }
+
     .legend-grid-item {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 6px;
-      width: 100%;
-      text-align: left;
-      white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 6px;
+        width: 100%;
+        text-align: left;
+        white-space: nowrap;
     }
-    .legend-grid-item img { flex-shrink: 0; }
-    .legend-grid-item small { text-align: left; }
-    .medical-legend .class-column,
-    .police-legend { text-align: left; }
-    .medical-legend .hospital-list { align-items: flex-start; }
-    .medical-legend .hospital-row { justify-content: flex-start; }
-    .medical-legend .hospital-item .btn {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 6px;
-      width: auto;
-      padding-left: 0 !important;
-      text-align: left;
+
+    .legend-grid-item img {
+        flex-shrink: 0;
     }
-    .police-legend { margin: 0; min-width: 0; }
-    .police-legend .legend-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .police-legend .legend-grid-item {
-      white-space: normal;
-      align-items: flex-start;
-      line-height: 1.2;
+
+    .legend-grid-item small {
+        text-align: left;
     }
-    .police-legend .legend-grid-item small { overflow-wrap: anywhere; }
-    .info-modal-dialog {
-      width: calc(100% - 32px);
-      max-width: 1180px;
-    }
-    .info-modal-dialog .modal-content {
-      max-height: 88vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      font-family: 'Source Sans Pro', Arial, sans-serif;
-      font-size: 15px;
-      line-height: 1.25;
-      color: #303943;
-    }
-    .info-modal-dialog .modal-title {
-      font-size: 20px;
-      font-weight: 400;
-      line-height: 1.3;
-    }
-    .info-modal-tabs {
-      flex: 0 0 auto;
-      flex-wrap: nowrap;
-      gap: 10px;
-      padding-bottom: 10px;
-      overflow-x: auto;
-    }
-    .info-modal-tabs .nav-link {
-      margin-bottom: 0;
-      white-space: nowrap;
-      border-radius: 6px 6px 0 0;
-      font-size: 13px;
-      font-weight: 700;
-    }
-    .info-modal-body {
-      overflow-y: auto;
-      min-height: 0;
-      padding: 16px 24px 24px;
-    }
-    .info-modal-content p,
-    .info-modal-content li {
-      font-size: 15px;
-      line-height: 1.3;
-    }
-    .info-modal-content h6 {
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .info-modal-content .alert { padding: 16px 20px; }
-    @container (max-width: 900px) {
-      .emergency-legend { grid-template-columns: 1fr; }
-    }
+
+    /* ====== DIRECTIONS PANEL - Modern Styling ====== */
     #directionsPanel {
         font-family: 'Segoe UI', Roboto, -apple-system, sans-serif !important;
         scrollbar-width: thin;
@@ -270,7 +226,7 @@
         padding: 10px 12px;
         background: linear-gradient(135deg, #1a73e8, #4285f4);
         border-radius: 8px 8px 0 0;
-        margin: -10px -10px 10px -10px;
+        margin: 0;
         color: #fff;
     }
     #directionsPanel .dp-header-title {
@@ -409,58 +365,217 @@
         border-radius: 6px;
     }
 
+    /* === Info modal bertab (Polda / Polres / Polsek) ===
+       Sama seperti di halaman Police, Dashboard, Airports, & Hospital. Lebarnya
+       cukup untuk satu baris tab, tingginya mengikuti isi. CSS halaman ini
+       Bootstrap 4 (AdminLTE), jadi lebar dialog harus di-override sendiri. */
+    .info-modal-dialog {
+        max-width: 1180px;
+        width: 95vw;
+    }
+    .info-modal-dialog .modal-content {
+        max-height: 88vh;
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .info-modal-dialog .modal-header {
+        flex: 0 0 auto;
+        background: #f8f9fa;
+    }
+
+    .info-modal-tabs {
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        flex: 0 0 auto;
+        flex-wrap: nowrap;
+        gap: 2px;
+        overflow-x: auto;
+    }
+    .info-modal-tabs .nav-link {
+        border: 1px solid transparent;
+        border-bottom: none;
+        border-radius: 6px 6px 0 0;
+        color: #55606e;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 8px 14px;
+        white-space: nowrap;
+    }
+    .info-modal-tabs .nav-link:hover {
+        background: #eef2f7;
+        color: #395272;
+    }
+    .info-modal-tabs .nav-link.active {
+        background: #fff;
+        color: #395272;
+        border-color: #dee2e6 #dee2e6 #fff;
+    }
+    .info-modal-body {
+        padding: 0;
+        overflow: hidden;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+    .info-modal-content {
+        overflow-y: auto;
+        padding: 18px 24px 24px 24px;
+        min-height: 260px;
+        max-height: calc(88vh - 120px);
+    }
+    .info-modal-content ul {
+        padding-left: 20px;
+        margin-bottom: 12px;
+    }
+    .info-modal-content ul li {
+        margin-bottom: 6px;
+        line-height: 20px;
+        text-align: justify;
+    }
+    .info-modal-content ul ul {
+        margin-top: 6px;
+        margin-bottom: 4px;
+        list-style-type: circle;
+        padding-left: 20px;
+    }
+    .info-modal-content ul ul li {
+        margin-bottom: 4px;
+    }
+    .info-modal-figure {
+        margin-top: 14px;
+        text-align: center;
+    }
+    .info-modal-figure img {
+        display: inline-block;
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #e3e8ee;
+        border-radius: 6px;
+    }
+    .info-modal-note {
+        margin: 8px 0 4px 0;
+        padding: 8px 12px;
+        background: #f4f8fb;
+        border-left: 3px solid #395272;
+        border-radius: 4px;
+        font-size: 12.5px;
+        line-height: 19px;
+        text-align: justify;
+        color: #445060;
+    }
+
+    /* Tabel klasifikasi Polda (gaya biru bertingkat) */
+    .polda-class-table {
+        width: 100%;
+        margin: 4px 0 8px 0;
+        border-collapse: collapse;
+        font-size: 13px;
+        line-height: 19px;
+        color: #10333f;
+    }
+    .polda-class-table th,
+    .polda-class-table td {
+        padding: 10px 12px;
+        border: 1px solid #fff;
+        text-align: justify;
+        vertical-align: top;
+    }
+    .polda-class-table thead th {
+        background: #1c7fa4;
+        color: #fff;
+        font-weight: 700;
+        text-align: left;
+        vertical-align: middle;
+    }
+    .polda-class-table tbody tr:nth-child(odd) td {
+        background: #62c2dd;
+    }
+    .polda-class-table tbody tr:nth-child(even) td {
+        background: #cbe7f4;
+    }
+
+    /* Tabel klasifikasi unit Polres & Polsek (kolom pertama navy, baris biru bertingkat) */
+    .unit-class-table {
+        width: 100%;
+        margin: 4px 0 8px 0;
+        border-collapse: collapse;
+        font-size: 13px;
+        line-height: 19px;
+        color: #10333f;
+    }
+    .unit-class-table th,
+    .unit-class-table td {
+        padding: 10px 12px;
+        border: 1px solid #fff;
+        vertical-align: top;
+    }
+    .unit-class-table thead th {
+        background: #14506a;
+        color: #fff;
+        font-weight: 700;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .unit-class-table tbody th {
+        background: #14506a;
+        color: #fff;
+        font-weight: 700;
+        text-align: left;
+    }
+    .unit-class-table tbody tr:nth-child(odd) td {
+        background: #83c9e5;
+    }
+    .unit-class-table tbody tr:nth-child(even) td {
+        background: #cfe7f5;
+    }
 </style>
+
 @endpush
 
 @section('conten')
 
 <div class="card">
 
-    <div class="d-flex justify-content-between p-3" style="background-color: #dfeaf1;">
-
-        <div class="d-flex flex-column gap-1">
-            <h2 class="fw-bold mb-0">{{ $hospital->name }}</h2>
-            <span class="fw-bold"><b>Global Classification:</b> {{ $hospital->facility_category }} | <b>Country Classification:</b> {{ $hospital->facility_level }}</span>
+<div class="d-flex justify-content-between p-3" style="background-color: #dfeaf1;">
+       <div class="d-flex flex-column gap-1">
+            <h2 class="fw-bold mb-0">{{ $police->name_police }}</h2>
+            <span class="fw-bold"><b>Police Classification (Global):</b> {{ $police->level }} | <b>Police Classification (Country):</b> {{ $police->category }}</span>
         </div>
 
         <div class="d-flex gap-2 ms-auto">
-            <a href="{{ url('hospital') }}" class="btn btn-danger d-flex flex-column align-items-center p-3 {{ request()->is('home') ? 'active' : '' }}">
+
+            <a href="{{ url('police') }}" class="btn btn-danger d-flex flex-column align-items-center p-3 {{ request()->is('home') ? 'active' : '' }}">
                 <i class="bi bi-house-door-fill fs-3"></i>
                 <small>Home</small>
             </a>
 
-            <!-- Button 2 -->
-            <a href="{{ url('hospitals') }}/{{$hospital->id}}" class="btn btn-outline-danger d-flex flex-column align-items-center p-3 {{ request()->is('hospitals/'.$hospital->id) ? 'active' : '' }}">
-                 <img src="{{ asset('images/icon-menu-general-info.png') }}" style="width: 18px; height: 24px;">
+              <!-- Button 2 -->
+            <a href="{{ url('police') }}/{{$police->id}}/detail" class="btn btn-outline-danger d-flex flex-column align-items-center p-3 {{ request()->is('police/'.$police->id.'/detail') ? 'active' : '' }}">
+                <img src="{{ asset('images/icon-menu-general-info.png') }}" style="width: 18px; height: 24px;">
                 <small>General</small>
             </a>
 
-            <!-- Button 3 -->
-            <a href="{{ url('hospitals/clinic') }}/{{$hospital->id}}" class="btn btn-outline-danger d-flex flex-column align-items-center p-3 {{ request()->is('hospitals/clinic/'.$hospital->id) ? 'active' : '' }}">
-                <img src="{{ asset('images/icon-menu-medical-facility-white.png') }}" style="width: 18px; height: 24px;">
-                <small>Clinical</small>
-            </a>
-
-            <!-- Button 4 -->
-            <a href="{{ url('hospitals/emergency') }}/{{$hospital->id}}" class="btn btn-outline-danger d-flex flex-column align-items-center p-3 {{ request()->is('hospitals/emergency/'.$hospital->id) ? 'active' : '' }}">
+            <!-- Button 5 -->
+             <a href="{{ url('police') }}/{{$police->id}}/emergency" class="btn btn-outline-danger d-flex flex-column align-items-center p-3 {{ request()->is('police/'.$police->id.'/emergency') ? 'active' : '' }}">
                 <img src="{{ asset('images/icon-emergency-support-white.png') }}" style="width: 24px; height: 24px;">
                 <small>Emergency</small>
             </a>
 
+            <!-- Button 6 -->
             <a href="{{ url('aircharter') }}" class="btn btn-danger d-flex flex-column align-items-center p-3 {{ request()->is('aircharter') ? 'active' : '' }}">
-                 <img src="{{ asset('images/icon-air-charter.png') }}" style="width: 48px; height: 24px;">
+                <img src="{{ asset('images/icon-air-charter.png') }}" style="width: 48px; height: 24px;">
                 <small>Air Charter</small>
             </a>
 
-            <!-- Button 5 -->
+             <!-- Button 5 -->
+            <a href="{{ url('hospital') }}" class="btn btn-danger d-flex flex-column align-items-center p-3 {{ request()->is('hospital') ? 'active' : '' }}">
+                 <img src="{{ asset('images/icon-medical.png') }}" style="width: 24px; height: 24px;">
+                <small>Medical</small>
+            </a>
+
             <a href="{{ url('airports') }}" class="btn btn-danger d-flex flex-column align-items-center p-3 {{ request()->is('airports') ? 'active' : '' }}">
                 <i class="bi bi-airplane fs-3"></i>
                 <small>Aviation</small>
-            </a>
-
-            <a href="{{ url('police') }}" class="btn btn-danger d-flex flex-column align-items-center p-3 {{ request()->is('police') ? 'active' : '' }}">
-                <i class="bi bi-person-badge" style="width: 24px; height: 24px;"></i>
-                <small>Police</small>
             </a>
 
             <!-- Button 7 -->
@@ -468,15 +583,16 @@
             <img src="{{ asset('images/icon-embassy.png') }}" style="width: 24px; height: 24px;">
                 <small>Embassies</small>
             </a>
-        </div>
-    </div>
 
-    <div class="card mb-4 position-relative">
+        </div>
+</div>
+
+   <div class="card mb-4 position-relative">
         <div class="card-body" style="padding:0 7px;">
-            <small><i>Last Updated {{ $hospital->created_at->format('M Y') }}</i></small>
+            <small><i>Last Updated {{ $police->created_at->format('M Y') }}</i></small>
 
             @role('admin')
-            <a href="{{ route('hospitaldata.edit', $hospital->id) }}"
+            <a href="{{ route('policedata.edit', $police->id) }}"
             style="position:absolute; right:7px;" title="edit">
                 <i class="fas fa-edit"></i>
             </a>
@@ -486,12 +602,11 @@
 
     <div class="row">
 
-        <div class="col-md-8">
-             <div class="card emergency-tools-card">
+        <div class="col-sm-8 d-flex flex-column gap-3">
+            <div class="card emergency-tools-card">
                 <div class="card-header fw-bold"><img src="{{ asset('images/icon-emergency-support.png') }}" style="width: 24px; height: 24px;"> Emergency Support Tools</div>
 
-                <!-- Legend container -->
-                  <div class="classification emergency-legend">
+               <div class="classification emergency-legend">
                     <!-- Airfield Classification -->
                     <div class="classification">
                       <!-- Airport -->
@@ -570,7 +685,7 @@
                           <div class="class-header class-basic">Basic</div>
                           <div class="hospital-list">
                             <div class="hospital-row">
-                               <div class="hospital-item">
+                              <div class="hospital-item">
                                 <button class="btn p-1" data-bs-toggle="modal" data-bs-target="#level44Modal">
                                   <img src="https://pg.concordreview.com/wp-content/uploads/2025/01/hospital_pin-purple.png" style="width:24px; height:24px;">
                                   <small>Primary</small>
@@ -613,31 +728,35 @@
 
                     </div>
                   </div>
+
                 <div class="card-body p-0">
                     <div id="map"></div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-           <div class="card">
-                <div class="card-header fw-bold"><img src="https://concord-consulting.com/static/img/cmt/icon/radar-icon.png" style="width: 24px; height: 24px;"> Nearest Airfields and Medical Facilities</div>
+        <div class="col-sm-4 d-flex flex-column gap-3">
+            <div class="card">
+                <div class="card-header fw-bold"><img src="https://concord-consulting.com/static/img/cmt/icon/radar-icon.png" style="width: 24px; height: 24px;"> Nearest Support Facilities</div>
                 <div class="card-body overflow-auto">
-                    <?php echo $hospital->nearest_airfield; ?>
+                    <?php echo $police->nearest_medical_facility; ?>
                 </div>
             </div>
+
+            <div class="card">
+                <div class="card-header fw-bold"><img src="{{ asset('images/hotlines-icon.png') }}" style="width: 24px; height: 24px;"> Emergency Hotline</div>
+                <div class="card-body">
+                    <?php echo $hospital->travel_agent; ?>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header fw-bold"><img src="{{ asset('images/icon-medical-support-website.png') }}" style="width: 24px; height: 24px;"> Emergency Medical Support</div>
                 <div class="card-body" style="max-height: 250px; overflow-y: auto;">
-                    <?php echo $hospital->medical_support_website; ?>
+                        <?php echo $hospital->medical_support_website; ?>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header fw-bold"><img src="{{ asset('images/icon-police.png') }}" style="width: 24px; height: 24px;"> Nearest Police station</div>
-                <div class="card-body overflow-auto">
-                    <?php echo $hospital->nearest_police_station; ?>
-                </div>
-            </div>
+
         </div>
 
     </div>
@@ -654,7 +773,7 @@
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+     <div class="modal-body">
         <p class="p-modal text-justify">Also known as private airfields or airstrips are primarily used for general and private aviation are owned by private individuals, groups, corporations, or organizations operated for their exclusive use that may include limited access for authorized personnel by the owner or manager. Owners are responsible to ensure safe operation, maintenance, repair, and control of who can use the facilities. Typically, they are not open to the public or provide scheduled commercial airline services and cater to private pilots, business aviation, and sometimes small charter operations. Services may be provided if authorized by the appropriate regulatory authority.</p>
 
         <p class="p-modal text-justify">A large majority of private airports are grass or dirt strip fields without services or facilities, they may feature amenities such as hangars, fueling facilities, maintenance services, and ground transportation options tailored to the needs of their owners or users. Private airports are not subject to the same level of regulatory oversight as public airports, but must still comply with applicable aviation regulations, safety standards, and environmental requirements. In the event of an emergency, landing at a private airport is authorized without any prior approval and should be done if landing anywhere else compromises the safety of the aircraft, crew, passengers, or cargo.</p>
@@ -690,7 +809,7 @@
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+     <div class="modal-body">
         <p class="p-modal text-justify">Facilities where military aircraft operate, also known as a military airport, airbase, or air station. Features include aircraft maintenance, air traffic control, communications, emergency response, fuel and weapon storage, defensive systems, aircraft shelters, and personnel facilities.</p>
       </div>
     </div>
@@ -724,7 +843,7 @@
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+     <div class="modal-body">
         <p class="p-modal text-justify">Exclusively manages flights that originate and end within the same country, does not have international customs or border control facilities. Airport often has smaller and shorter runways, suitable for smaller regional aircraft used on domestic routes, and cannot support larger haul aircraft having less developed support services. Features can include aircraft maintenance, air traffic control, communications, emergency response, and fuel storage.</p>
       </div>
     </div>
@@ -741,7 +860,7 @@
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+     <div class="modal-body">
         <p class="p-modal text-justify">Meet standards set by the International Air Transport Association (IATA) and the International Civil Aviation Organization (ICAO), facilitate transnational travel managing flights between countries, have customs and border control facilities to manage passengers and cargo, and may have dedicated terminals for domestic and international flights. International airports have longer runways to accommodate larger, heavier aircraft, are often a main hub for air traffic, and can serve as a base for larger airlines. Features can include aircraft maintenance, air traffic control, communications, emergency response, and fuel storage</p>
       </div>
     </div>
@@ -1128,18 +1247,22 @@
 @endsection
 
 @push('service')
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCd-WVlGgZFJwAtPZkbAEca2Np6OI7CBTM&libraries=places,geometry"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const hospitalData = {!! json_encode([
-        'id'        => $hospital->id,
-        'name'      => $hospital->name,
-        'latitude'  => $hospital->latitude,
-        'longitude' => $hospital->longitude,
-        'icon'      => $hospital->icon ?? '',
+    const policeData = {!! json_encode([
+        'id'        => $police->id,
+        'name'      => $police->name_police,
+        'latitude'  => $police->latitude,
+        'longitude' => $police->longitude,
+        'icon'      => $police->icon ?? '',
+        'location'  => $police->location ?? '',
+        'telephone' => $police->telephone ?? '',
+        'website'   => $police->website ?? '',
     ]) !!};
 
     const nearbyHospitals = @json($nearbyHospitals);
@@ -1156,13 +1279,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // === ICON DEFAULT ===
     const DEFAULT_HOSPITAL_ICON_URL = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png';
     const DEFAULT_AIRPORT_ICON_URL  = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png';
-    const DEFAULT_MAIN_HOSPITAL_ICON_URL = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png';
+    const DEFAULT_MAIN_POLICE_ICON_URL = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png';
     const DEFAULT_POLICE_ICON_URL = 'https://png.pngtree.com/png-vector/20221211/ourmid/pngtree-minimal-location-map-icon-logo-symbol-vector-design-transparent-background-png-image_6520892.png';
     const DEFAULT_EMBASSY_ICON_URL = '/images/embassy-icon-new.png';
 
     // === INISIALISASI PETA ===
     function initializeMap() {
-        const center = new google.maps.LatLng(hospitalData.latitude, hospitalData.longitude);
+        const center = new google.maps.LatLng(policeData.latitude, policeData.longitude);
         map = new google.maps.Map(document.getElementById('map'), {
             center: center,
             zoom: 11,
@@ -1230,19 +1353,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function addMainHospitalAndCircle() {
+    function addMainPoliceAndCircle() {
         mainMarker = new google.maps.Marker({
-            position: new google.maps.LatLng(hospitalData.latitude, hospitalData.longitude),
+            position: new google.maps.LatLng(policeData.latitude, policeData.longitude),
             map: map,
             icon: {
-                url: DEFAULT_MAIN_HOSPITAL_ICON_URL,
+                url: DEFAULT_MAIN_POLICE_ICON_URL,
                 scaledSize: new google.maps.Size(25, 41)
             },
-            title: hospitalData.name
+            title: policeData.name
         });
 
         const infoWindow = new google.maps.InfoWindow({
-            content: `<b>${hospitalData.name}</b><br>This is the main hospital.`
+            content: `<b>${policeData.name}</b><br>This is the main police station.`
         });
 
         mainMarker.addListener('click', () => {
@@ -1256,7 +1379,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fillColor: '#FF0000',
             fillOpacity: 0.1,
             map: map,
-            center: { lat: parseFloat(hospitalData.latitude), lng: parseFloat(hospitalData.longitude) },
+            center: { lat: parseFloat(policeData.latitude), lng: parseFloat(policeData.longitude) },
             radius: radiusKm * 1000
         });
     }
@@ -1268,10 +1391,11 @@ document.addEventListener('DOMContentLoaded', () => {
         nearbyMarkersGroup = [];
     }
 
+    // === Tambahkan Marker Sekitar ===
     function addNearbyMarkers(data, defaultIconUrl, type, filters = {}) {
         data.forEach(item => {
             const distance = calculateDistance(
-                hospitalData.latitude, hospitalData.longitude,
+                policeData.latitude, policeData.longitude,
                 item.latitude, item.longitude
             );
             if (distance > radiusKm) return;
@@ -1309,7 +1433,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            const name = item.name || item.airport_name || item.name_embassiees || 'N/A';
+            const name = item.name || item.airport_name || item.name_police || item.name_embassiees || 'N/A';
             const level = item.facility_level || item.category || '';
 
             let url = '#';
@@ -1340,7 +1464,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === HITUNG JARAK ===
     function calculateDistance(lat1, lon1, lat2, lon2) {
         const R = 6371;
         const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -1501,12 +1624,12 @@ document.addEventListener('DOMContentLoaded', () => {
     window.getDirection = function(lat, lng) {
         const origin = searchLocation
             ? new google.maps.LatLng(searchLocation.lat, searchLocation.lng)
-            : new google.maps.LatLng(hospitalData.latitude, hospitalData.longitude);
+            : new google.maps.LatLng(policeData.latitude, policeData.longitude);
 
         directionsService.route({
             origin: origin,
             destination: new google.maps.LatLng(lat, lng),
-            travelMode: 'DRIVING' // Adjust as needed
+            travelMode: 'DRIVING'
         }, (response, status) => {
             if (status === 'OK') {
                 directionsRenderer.setDirections(response);
@@ -1527,13 +1650,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fitMapToBounds() {
         const bounds = new google.maps.LatLngBounds();
-        bounds.extend(new google.maps.LatLng(hospitalData.latitude, hospitalData.longitude));
+        bounds.extend(new google.maps.LatLng(policeData.latitude, policeData.longitude));
         if (searchLocation) {
             bounds.extend(new google.maps.LatLng(searchLocation.lat, searchLocation.lng));
         }
         nearbyMarkersGroup.forEach(m => bounds.extend(m.getPosition()));
 
-        // Also extend for radius circle
         const circleBounds = radiusCircle.getBounds();
         if(circleBounds) {
             bounds.union(circleBounds);
@@ -1545,7 +1667,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateMarkers(filterType, hospitalLevels, airportClassifications, policeCategories) {
         clearNearbyMarkers();
         if (radiusCircle) radiusCircle.setMap(null);
-        addMainHospitalAndCircle();
+        addMainPoliceAndCircle();
 
         const filters = { hospitalLevels, airportClassifications, policeCategories };
         if (filterType === 'hospital') {
@@ -1751,8 +1873,6 @@ document.addEventListener('DOMContentLoaded', () => {
             pacContainer.style.visibility = 'visible';
             pacContainer.style.opacity = '1';
             pacContainer.style.pointerEvents = 'auto';
-            // TEMP DEBUG: remove once confirmed working.
-            console.log('[searchLocation] pac-container items:', pacContainer.children.length, pacContainer.getBoundingClientRect());
         }
 
         function claimPacContainer() {
@@ -1844,8 +1964,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <b>${place.name}</b><br>
                         <small>Lat: ${lat.toFixed(5)}, Lng: ${lon.toFixed(5)}</small><br>
                         <button class="btn btn-sm btn-primary mt-2"
-                            onclick="getDirection(${hospitalData.latitude}, ${hospitalData.longitude})">
-                            Get Direction to Main Hospital
+                            onclick="getDirection(${policeData.latitude}, ${policeData.longitude})">
+                            Get Direction to Main Police Station
                         </button>
                     </div>
                 `
@@ -1867,7 +1987,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === JALANKAN ===
     initializeMap();
-    addMainHospitalAndCircle();
+    addMainPoliceAndCircle();
     updateMarkers('all', [], [], []);
     const filterContainer = setupFilterControl();
     setupSearchControl(filterContainer);

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Hospital;
 use App\Models\Airport;
+use App\Models\Police;
+use App\Models\Embassiees;
 use App\Models\Provincesregion;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +17,7 @@ class HospitalController extends Controller
      */
     public function index(Request $request)
     {
-        $hospitalNames = DB::table('hospitals')->distinct()->pluck('name')->filter()->sort()->values();
+        $hospitalNames = DB::table('hospitals')->where('hospital_status', true)->distinct()->pluck('name')->filter()->sort()->values();
         $hospitalCategories = DB::table('hospitals')->distinct()->pluck('facility_level')->filter()->sort()->values();
         $hospitalLocations = DB::table('hospitals')->distinct()->pluck('address')->filter()->sort()->values();
 
@@ -120,14 +122,15 @@ class HospitalController extends Controller
 
         $latitude = $hospital->latitude;
         $longitude = $hospital->longitude;
-        $radius_km = 500; // Your desired radius
+        $radius_km = 100; // Your desired radius
 
         // Fetch nearby hospitals (excluding the current one)
         $nearbyHospitals = Hospital::selectRaw("
             id, name, icon, latitude, longitude, facility_level, facility_category,
             ( 6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance
         ", [$latitude, $longitude, $latitude])
-        ->having('distance', '<=', $radius_km)
+        ->where('hospital_status', true)
+        ->having('distance', '<=', 500)
         ->where('id', '!=', $hospital->id) // Exclude the current hospital
         ->orderBy('distance')
         ->get();
@@ -137,17 +140,50 @@ class HospitalController extends Controller
             id, airport_name AS name, icon, latitude, longitude, category,
             ( 6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance
         ", [$latitude, $longitude, $latitude])
+        ->where('airport_status', true)
+        ->having('distance', '<=', 500)
+        ->orderBy('distance')
+        ->get();
+
+         // === NEARBY POLICE ===
+        $nearbyPolices = Police::selectRaw("
+            id, name_police AS name, icon, latitude, longitude, location, telephone, level, classification, category, fax, email, website, hrs_of_operation,
+            ( 6371 * acos(
+                cos( radians(?) )
+                * cos( radians( latitude ) )
+                * cos( radians( longitude ) - radians(?) )
+                + sin( radians(?) )
+                * sin( radians( latitude ) )
+            )) AS distance
+        ", [$latitude, $longitude, $latitude])
+        ->where('police_status', true)
+        ->having('distance', '<=', 500)
+        ->orderBy('distance')
+        ->get();
+
+        // === NEARBY EMBASSY ===
+        $nearbyEmbassy = Embassiees::selectRaw("
+            id, name_embassiees AS name, latitude, longitude, location, telephone, fax, email, website,
+            ( 6371 * acos(
+                cos( radians(?) )
+                * cos( radians( latitude ) )
+                * cos( radians( longitude ) - radians(?) )
+                + sin( radians(?) )
+                * sin( radians( latitude ) )
+            )) AS distance
+        ", [$latitude, $longitude, $latitude])
+        ->where('embassy_status', true)
         ->having('distance', '<=', $radius_km)
         ->orderBy('distance')
         ->get();
 
-        return view('pages.hospital.showdetailemergency', compact('hospital','nearbyHospitals','radius_km','nearbyAirports'));
+        return view('pages.hospital.showdetailemergency', compact('hospital','nearbyHospitals','radius_km','nearbyAirports','nearbyPolices','nearbyEmbassy'));
     }
 
     public function filter(Request $request)
     {
         $query = Hospital::query();
-        $query->leftJoin('cities', 'hospitals.province_id', '=', 'cities.id');
+        $query->leftJoin('cities', 'hospitals.city_id', '=', 'cities.id');
         $query->leftJoin('provincesregions', 'hospitals.province_id', '=', 'provincesregions.id');
         $query->select('hospitals.*', 'cities.city', 'provincesregions.provinces_region');
 
@@ -200,7 +236,7 @@ class HospitalController extends Controller
             $haversine = "(6371 * acos(cos(radians(?)) * cos(radians(latitude))
                         * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude))))";
 
-            $query->selectRaw("hospitals.*, $haversine AS distance", [
+            $query->selectRaw("hospitals.*, cities.city, provincesregions.provinces_region, $haversine AS distance", [
                     $centerLat, $centerLng, $centerLat
                 ])
                 ->whereRaw("$haversine < ?", [
@@ -256,6 +292,30 @@ class HospitalController extends Controller
 
          // Execute the query and return JSON response
         $hospitals = $query->get();
-        return response()->json($hospitals);
+        $levelCounts = [
+            'Tertiary' => 0,
+            'Secondary' => 0,
+            'Primary' => 0,
+        ];
+
+        foreach ($hospitals as $hospital) {
+
+            if (empty($hospital->facility_level)) {
+                continue;
+            }
+
+            $levels = array_map('trim', explode(',', $hospital->facility_level));
+
+            foreach ($levels as $level) {
+                if (isset($levelCounts[$level])) {
+                    $levelCounts[$level]++;
+                }
+            }
+        }
+
+        return response()->json([
+            'hospitals' => $hospitals,
+            'levelCounts' => $levelCounts
+        ]);
     }
 }

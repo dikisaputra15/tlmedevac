@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Embassiees;
+use App\Models\Police;
+use App\Models\Hospital;
+use App\Models\Airport;
 use App\Models\Provincesregion;
+use App\Models\City;
 use Illuminate\Support\Facades\DB;
 
 class EmbassieesController extends Controller
@@ -77,9 +81,9 @@ class EmbassieesController extends Controller
     public function showdetail($id)
     {
         $embassy = Embassiees::findOrFail($id);
-        $city = DB::table('cities')->where('id', $embassy->city_id)->first();
-        $province = DB::table('provincesregions')->where('id', $embassy->province_id)->first();
-        return view('pages.embassiees.showdetail', compact('embassy','city','province'));
+        $city = City::findOrFail($embassy->city_id);
+        $province = Provincesregion::findOrFail($embassy->province_id);
+        return view('pages.embassiees.showdetail', compact('embassy', 'city', 'province'));
     }
 
     public function filter(Request $request)
@@ -110,7 +114,7 @@ class EmbassieesController extends Controller
             // Ensure province IDs are an array and valid integers
             $provinceIds = array_filter((array) $request->input('provinces'), 'is_numeric');
             if (!empty($provinceIds)) {
-                $q->whereIn('province_id', $provinceIds);
+                $q->whereIn('embassiees.province_id', $provinceIds);
             }
         });
 
@@ -130,7 +134,7 @@ class EmbassieesController extends Controller
             $haversine = "(6371 * acos(cos(radians(?)) * cos(radians(latitude))
                         * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude))))";
 
-            $query->selectRaw("embassiees.*, $haversine AS distance", [
+            $query->selectRaw("embassiees.*, cities.city, provincesregions.provinces_region, $haversine AS distance", [
                     $centerLat, $centerLng, $centerLat
                 ])
                 ->whereRaw("$haversine < ?", [
@@ -187,5 +191,52 @@ class EmbassieesController extends Controller
          // Execute the query and return JSON response
         $embessy = $query->get();
         return response()->json($embessy);
+    }
+
+      public function showdetailemergency($id)
+    {
+        $embassy = Embassiees::findOrFail($id);
+        $hospital = Hospital::select('medical_support_website','travel_agent')->first();
+
+          // --- Ambil Bandara Terdekat ---
+        $nearbyAirports = Airport::selectRaw('*, ( 6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance', [$embassy->latitude, $embassy->longitude, $embassy->latitude])
+            ->where('airport_status', true)
+            ->having('distance', '<=', 500) // Filter dalam radius 100 km (sesuaikan)
+            ->where('id', '!=', $embassy->id) // Jangan sertakan bandara utama itu sendiri
+            ->orderBy('distance')
+            ->get();
+
+        // --- Ambil Rumah Sakit Terdekat ---
+        $nearbyHospitals = Hospital::selectRaw('*, ( 6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance', [$embassy->latitude, $embassy->longitude, $embassy->latitude])
+            ->where('hospital_status', true)
+            ->having('distance', '<=', 500) // Filter dalam radius 100 km (sesuaikan)
+            ->orderBy('distance')
+            ->get();
+
+        $nearbyPolices = Police::selectRaw("*, ( 6371 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ))) AS distance", [$embassy->latitude, $embassy->longitude, $embassy->latitude])
+            ->where('police_status', true)
+            ->having('distance', '<=', 500)
+            ->orderBy('distance')
+            ->get();
+
+         // === NEARBY EMBASSY ===
+        $nearbyEmbassy = Embassiees::selectRaw("
+            id, name_embassiees AS name, latitude, longitude, location, telephone, fax, email, website,
+            ( 6371 * acos(
+                cos( radians(?) )
+                * cos( radians( latitude ) )
+                * cos( radians( longitude ) - radians(?) )
+                + sin( radians(?) )
+                * sin( radians( latitude ) )
+            )) AS distance
+        ", [$embassy->latitude, $embassy->longitude, $embassy->latitude])
+        ->where('embassy_status', true)
+        ->having('distance', '<=', 500)
+        ->orderBy('distance')
+        ->get();
+
+        $radius_km = 500; // Radius lingkaran untuk ditampilkan di peta
+
+        return view('pages.embassiees.showdetailemergency', compact('embassy', 'nearbyAirports', 'nearbyHospitals', 'radius_km', 'hospital', 'nearbyPolices', 'nearbyEmbassy'));
     }
 }
